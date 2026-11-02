@@ -275,6 +275,7 @@ class VisitorPatternTest {
         assertFalse(quality.isPassed());
     }
 
+
     @Test
     void technicalDebtVisitorDetectsHighComplexity() {
         Directory project = new Directory("project");
