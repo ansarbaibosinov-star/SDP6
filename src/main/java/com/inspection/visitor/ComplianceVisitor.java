@@ -18,7 +18,7 @@ public class ComplianceVisitor implements ProjectVisitor {
     private final List<String> violations = new ArrayList<>();
     private final Set<String> sourceFileNames = new HashSet<>();
     private final Set<String> testedSourceFileNames = new HashSet<>();
-    private final Set<String> reportedMissingTests = new HashSet<>();
+
 
     @Override
     public void visit(SourceCodeFile file) {
@@ -68,8 +68,7 @@ public class ComplianceVisitor implements ProjectVisitor {
         List<String> result = new ArrayList<>(violations);
 
         for (String sourceFile : sourceFileNames) {
-            if (!testedSourceFileNames.contains(sourceFile)
-                    && reportedMissingTests.add(sourceFile)) {
+            if (!testedSourceFileNames.contains(sourceFile)) {
                 result.add(
                         sourceFile + ": production source file has no test");
             }
@@ -108,6 +107,6 @@ public class ComplianceVisitor implements ProjectVisitor {
         violations.clear();
         sourceFileNames.clear();
         testedSourceFileNames.clear();
-        reportedMissingTests.clear();
+
     }
 }
