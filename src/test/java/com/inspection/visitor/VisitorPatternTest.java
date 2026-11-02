@@ -289,4 +289,39 @@ class VisitorPatternTest {
         assertEquals(10, visitor.getDebtPoints());
         assertTrue(visitor.getDebtItems().get(0).contains("complexity"));
     }
+    @Test
+    void complianceVisitorDetectsProhibitedDependencies() {
+        Directory project = new Directory("project");
+
+        project.addElement(new DependencyFile(
+                "pom.xml",
+                Map.of("library-a", "1.0"),
+                Set.of(),
+                Set.of("library-a")
+        ));
+
+        ComplianceVisitor visitor = new ComplianceVisitor();
+        project.accept(visitor);
+
+        assertFalse(visitor.isCompliant());
+        assertTrue(visitor.getViolations().stream()
+                .anyMatch(violation -> violation.contains("prohibited")));
+    }
+
+    @Test
+    void complianceResultsRemainStableWhenRequestedRepeatedly() {
+        Directory project = new Directory("project");
+
+        project.addElement(new SourceCodeFile(
+                "PaymentService.java", 100, 5, false, false));
+
+        ComplianceVisitor visitor = new ComplianceVisitor();
+        project.accept(visitor);
+
+        var firstResult = visitor.getViolations();
+        var secondResult = visitor.getViolations();
+
+        assertEquals(firstResult, secondResult);
+        assertEquals(1, secondResult.size());
+    }
 }
