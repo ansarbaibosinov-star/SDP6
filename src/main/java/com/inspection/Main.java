@@ -9,6 +9,7 @@ import com.inspection.visitor.ComplianceVisitor;
 import com.inspection.visitor.ProjectStatisticsVisitor;
 import com.inspection.visitor.QualityGateVisitor;
 import com.inspection.visitor.SecurityAuditVisitor;
+import com.inspection.visitor.TechnicalDebtVisitor;
 
 import java.util.Map;
 import java.util.Set;
@@ -97,5 +98,10 @@ public class Main {
                 new ComplianceVisitor();
         project.accept(complianceVisitor);
         System.out.println(complianceVisitor.generateReport());
+
+        TechnicalDebtVisitor debtVisitor = new TechnicalDebtVisitor();
+        project.accept(debtVisitor);
+        System.out.println(debtVisitor.generateReport());
     }
+
 }
